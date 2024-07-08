@@ -1,0 +1,51 @@
+Q.) The growth rate expression for a biochemical reaction, using a substrate inhibition
+model, is
+
+mu = {mu(max)*x}/{k(max) + x + k(1)*x^2}
+
+where mu is the specific growth rate, mu(max) and k(max), are parameters, and x is the substrate concentration. The growth rate relationship can be rearranged to
+
+(1/mu) = (K(1) / mu(max))*x + (K(max)/ mu(max))*(1/x) + (1/ mu(max))
+
+Data for a particular reactor are shown below. Use linear regression (M3.24) to solve for the parameters (mu(max) , k(max) and k(1)).
+mu, hr-1:   0.24 0.27 0.34 0.35 0.35 0.34 0.33 0.22
+x, g/liter:   0.1 0.15 0.25 0.50 0.75 1.00 1.50 3.00
+
+use matlab
+
+
+
+
+
+
+
+
+Soln:
+
+
+
+
+% Define your data
+mu = [0.24; 0.27; 0.34; 0.35; 0.35; 0.34; 0.33; 0.22];
+x = [0.1; 0.15; 0.25; 0.50; 0.75; 1.00; 1.50; 3.00];
+
+% Create the matrix A
+A = [x, 1./x, ones(size(x))];
+
+% Calculate the coefficients using the normal equations formula
+coefficients = inv(A.' * A) * A.' * (1./mu);
+
+% Extract the parameters
+k1_over_mu_max = coefficients(1);
+kmax_over_mu_max = coefficients(2);
+one_over_mu_max = coefficients(3);
+
+% Calculate the individual parameters
+mu_max = 1/one_over_mu_max;
+k1 = k1_over_mu_max * mu_max;
+kmax = kmax_over_mu_max * mu_max;
+
+% Display the results
+fprintf('mu_max: %f hr^-1\n', mu_max);
+fprintf('k1: %f g/liter\n', k1);
+fprintf('kmax: %f g/liter\n', kmax);
